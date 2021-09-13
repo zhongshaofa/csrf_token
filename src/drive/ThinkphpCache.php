@@ -14,7 +14,7 @@ namespace CsrfVerify\drive;
 
 
 use CsrfVerify\interfaces\SimpleCacheInterface;
-use think\facade\Cache;
+use think\Session;
 
 /**
  * TP框架内置缓存实现
@@ -26,19 +26,19 @@ class ThinkphpCache implements SimpleCacheInterface
 
     public function set(string $string, string $value): bool
     {
-        Cache::set($string, $value);
+        Session::set($string, $value);
         return true;
     }
 
     public function get(string $string): ?string
     {
-        $cache = Cache::get($string);
+        $cache = Session::get($string);
         return isEmpty($cache) ? null : $cache;
     }
 
     public function delete(string $string): bool
     {
-        Cache::delete($string);
+        Session::delete($string);
         return true;
     }
 
