@@ -45,7 +45,9 @@ class CsrfVerify implements CsrfVerifyInterface
     public function verify(string $token, CsrfVerifyEntity $entity, SimpleCacheInterface $cache): bool
     {
         $cacheName = $this->getCacheName($entity);
-        if ($cache->get($cacheName) == $token) {
+        $cacheData = $cache->get($cacheName);
+        $cache->delete($cacheName);
+        if ($cacheData == $token) {
             return true;
         }
         return false;
@@ -58,7 +60,7 @@ class CsrfVerify implements CsrfVerifyInterface
      */
     protected function build(CsrfVerifyEntity $entity): string
     {
-        $tokenString = $entity->getMark() . '_' . $entity->getSecret() . time();
+        $tokenString = $entity->getMark() . '_' . $entity->getSecret() . microtime();
         $token = md5($tokenString);
         $token = strtoupper($token);
         return $token;
